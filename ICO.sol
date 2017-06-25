@@ -25,7 +25,7 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
   
   	// Symbol of token
     string public constant symbol = "ROC"; 
-    uint8 public constant decimals = 2;  // 18 is the most common number of decimal places
+    uint8 public constant decimals = 10;  // 18 is the most common number of decimal places
 
     bytes32 myid_;
     
