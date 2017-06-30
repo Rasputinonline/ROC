@@ -12,7 +12,8 @@ The ERC20 token standard is a set of criteria developed by the Ethereum communit
 In this repository its been implemented in the ICO smart contract.
 
 **ICO**
-This contract has been written to implement the crowdsale of ROC token and to distribute the token to the market
+This contract is written for the crowdsale of the ROC token to distribute the token to the market
 
 **Dividend**
-This contract is deployed after the **ICO** has been deployed as it requires ICO instance to link token holders to the ROC token environment.
+This contract is deployed after the **ICO** contract has been deployed as it requires ICO instance to link ROC token holders to our main owner ROC environment.
+
