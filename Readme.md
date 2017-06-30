@@ -1,19 +1,18 @@
 #ROC token
 
-**3 Smart Contract are present in this repository**
+**3 Smart Contracts are present in this repository**
 
 1-ERC20 standard
 2-ICO
 3-Dividend
 
 **ERC20 standard**
-Basically there are some standard which are made standard in ethereum that should be followed in smart contract to make it as a standard contract.Its provided by Ethereum.
+The ERC20 token standard is a set of criteria developed by the Ethereum community for how to set up smart contracts on the blockchain in order to ensure optimal interoperability. ERC stands for Ethereum Request for Comments and this particular request was to help improve the standards to which developers should strive to adhere in developing smart tokens.
 
-In this repository its been implemented in ICO smart contract.
+In this repository its been implemented in the ICO smart contract.
 
 **ICO**
-this cntract is made for the crowdsale of ROC token to distribute the tokens in market
+This contract has been written to implement the crowdsale of ROC token and to distribute the token to the market
 
 **Dividend**
-This contract is deployed only after the **ICO** has been deployed because it require ICO instance to do some important work and link u the token holders to our main owner ROC environment.
-
+This contract is deployed after the **ICO** has been deployed as it requires ICO instance to link token holders to the ROC token environment.

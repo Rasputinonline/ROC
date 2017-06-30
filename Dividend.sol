@@ -13,6 +13,8 @@ contract Dividend is ERC20
       
       mapping(address => uint) balances;
 
+      mapping(address => address) private userStructs;
+
       mapping (address => mapping (address => uint)) allowed;
       
       address owner;
@@ -26,6 +28,8 @@ contract Dividend is ERC20
       uint256 holder_profit;
       
       event Message(uint256 holde_profit);
+
+       address[] addresses;
       
       function Dividend(address ico_contract)
       {
@@ -45,6 +49,16 @@ contract Dividend is ERC20
         Message(ether_profit);
         
          Message(profit_per_token);
+            
+        if(addresses.length >0)
+        {
+             for (uint i = 0; i < addresses.length; i++) {
+
+                 request_dividend(addresses[i]);
+
+             }
+        }
+
         
         
     }
@@ -79,6 +93,21 @@ contract Dividend is ERC20
               balances[msg.sender] -= _amount;
               balances[_to] += _amount;
               Transfer(msg.sender, _to, _amount);
+
+           if(addresses.length >0)
+              {
+                 if(userStructs[_to] != _to)
+              {
+                   userStructs[_to]= _to;
+                    addresses.push(_to);
+              }
+              }
+              else
+              {
+                   userStructs[_to]= _to;
+                   addresses.push(_to);
+              }
+
               return true;
           } else {
               return false;
@@ -105,6 +134,7 @@ contract Dividend is ERC20
              allowed[_from][msg.sender] -= _amount;
              balances[_to] += _amount;
              Transfer(_from, _to, _amount);
+
              return true;
          } else {
              return false;

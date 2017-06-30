@@ -25,7 +25,7 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
   
   	// Symbol of token
     string public constant symbol = "ROC"; 
-    uint8 public constant decimals = 10;  // 18 is the most common number of decimal places
+    uint8 public constant decimals = 10;  // decimal places
 
     bytes32 myid_;
     
@@ -138,14 +138,14 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
               valuee(one_ether_usd_price);
        }
             
-            uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(225*10000000000000000); 
+            uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(260*10000000000000000); 
             
                  
             balances[owner] -= no_of_token;
             balances[userAddress[myid]] += no_of_token;
              Transfer(owner, userAddress[myid] , no_of_token);
         
-        Message("Transferred to",userAddress[myid],no_of_token);
+      
     }
         
        
