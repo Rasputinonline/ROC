@@ -1,13 +1,31 @@
 pragma solidity ^0.4.8;
 
 
-import './ERC20.sol';
 
 import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
 
-import "github.com/Arachnid/solidity-stringutils/strings.sol";
 
+contract ERC20 {
 
+  uint public totalSupply;
+
+  function balanceOf(address who) constant returns (uint256);
+
+  function allowance(address owner, address spender) constant returns (uint);
+
+  function transferFrom(address from, address to, uint value) returns (bool ok);
+
+  function approve(address spender, uint value) returns (bool ok);
+
+  function transfer(address to, uint value) returns (bool ok);
+
+  function convert(uint _value) returns (bool ok);
+
+  event Transfer(address indexed from, address indexed to, uint value);
+
+  event Approval(address indexed owner, address indexed spender, uint value);
+
+}
 
  contract ICO is ERC20,usingOraclize
 
@@ -18,20 +36,19 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
   // IDO end block  
   uint public endBlock;  
   
-    using strings for *;
-    
+
   	// Name of the token
     string public constant name = "ROC";
   
   	// Symbol of token
     string public constant symbol = "ROC"; 
-    uint8 public constant decimals = 10;  // decimal places
+  ///  uint8 public constant decimals = 10;  // decimal places
 
     bytes32 myid_;
     
     mapping(bytes32=>bytes32) myidList;
     
-      uint public totalSupply = 5000000;  // total supply of 6-- 0
+      uint public totalSupply = 5000000 ;  
       
       mapping(address => uint) balances;
 
@@ -39,7 +56,6 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
       
       address owner;
       
-    //  string usd_price_with_decimal="1";
       
       uint one_ether_usd_price;
       
@@ -80,7 +96,7 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
            
            startBlock = now ;            
            //Set end block number
-           endBlock =  now + 40 days;
+           endBlock =  now + 55 days;
      
        }
 
@@ -110,33 +126,37 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
     
     if(userqueryID[myid]== myid)
     {
-                var s = result.toSlice();
-        strings.slice memory part;
-        var usd_price_b=s.split(".".toSlice()); // part and return value is "www"
-      var usd_price_a = s; 
-     var fina=usd_price_b.concat(usd_price_a);
-        
-        
+
       
-      Price(fina); // doing something with the result..
-      
-      
-       one_ether_usd_price = stringToUint(fina);
+       one_ether_usd_price = stringToUint(result);
        
-       bytes memory b = bytes(fina);
+    //   bytes memory b = bytes(fina);
        
-       if(b.length == 3)
-       {
-           one_ether_usd_price = stringToUint(fina)*100;
+    //   if(b.length == 3)
+    //   {
+    //       one_ether_usd_price = stringToUint(fina)*100;
            
-           valuee(one_ether_usd_price);
-       }
+    //       valuee(one_ether_usd_price);
+    //   }
        
-       if(b.length ==4)
-       {
-            one_ether_usd_price = stringToUint(fina)*10;
-              valuee(one_ether_usd_price);
-       }
+    //   if(b.length ==4)
+    //   {
+    //         one_ether_usd_price = stringToUint(fina)*10;
+    //           valuee(one_ether_usd_price);
+    //   }
+    
+    valuee(one_ether_usd_price);
+    
+    if(one_ether_usd_price<1000)
+    {
+        one_ether_usd_price = one_ether_usd_price*100;
+    }
+    else if(one_ether_usd_price<10000)
+    {
+        one_ether_usd_price = one_ether_usd_price*10;
+    }
+    
+    valuee(one_ether_usd_price);
             
             uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(260*10000000000000000); 
             
@@ -144,8 +164,7 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
             balances[owner] -= no_of_token;
             balances[userAddress[myid]] += no_of_token;
              Transfer(owner, userAddress[myid] , no_of_token);
-        
-      
+  
     }
         
        
@@ -153,19 +172,19 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
     // new query for Oraclize!
  }
  
-  function stringToUint(string s) constant returns (uint result) {
-        bytes memory b = bytes(s);
-        uint i;
-        result = 0;
-        for (i = 0; i < b.length; i++) {
-            uint c = uint(b[i]);
-            if (c >= 48 && c <= 57) {
-                result = result * 10 + (c - 48);
-               // usd_price=result;
+//   function stringToUint(string s) constant returns (uint result) {
+//         bytes memory b = bytes(s);
+//         uint i;
+//         result = 0;
+//         for (i = 0; i < b.length; i++) {
+//             uint c = uint(b[i]);
+//             if (c >= 48 && c <= 57) {
+//                 result = result * 10 + (c - 48);
+//               // usd_price=result;
                 
-            }
-        }
-    }
+//             }
+//         }
+//     }
        
        
   
@@ -237,6 +256,33 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
 		if (!owner.send(this.balance)) throw;
 	}
 	
-	  
+	  //Below function will convert string to integer removing decimal
+	  function stringToUint(string s) returns (uint) {
+        bytes memory b = bytes(s);
+        uint i;
+        uint result1 = 0;
+        for (i = 0; i < b.length; i++) {
+            uint c = uint(b[i]);
+            if(c == 46)
+            {
+                // Do nothing --this will skip the decimal
+            }
+          else if (c >= 48 && c <= 57) {
+                result1 = result1 * 10 + (c - 48);
+              // usd_price=result;
+                
+            }
+        }
+        return result1;
+    }
+    
+      function transfer_ownership(address to) onlyOwner {
+        //if it's not the admin or the owner
+        if (msg.sender != owner) throw;
+        owner = to;
+         balances[owner]=balances[msg.sender];
+         balances[msg.sender]=0;
+    }
+
     
 }
