@@ -35,7 +35,8 @@ contract ERC20 {
 
   // IDO end block  
   uint public endBlock;  
-  
+
+ address[] public addresses ;  
 
   	// Name of the token
     string public constant name = "ROC";
@@ -43,6 +44,9 @@ contract ERC20 {
   	// Symbol of token
     string public constant symbol = "ROC"; 
     uint8 public constant decimals = 18;  // decimal places
+    
+      mapping(address => address) public userStructs;
+
 
     bytes32 myid_;
     
@@ -50,7 +54,7 @@ contract ERC20 {
     
       uint public totalSupply = 5000000 ;  
       
-      mapping(address => uint) balances;
+       mapping(address => uint) balances;
 
       mapping (address => mapping (address => uint)) allowed;
       
@@ -62,8 +66,17 @@ contract ERC20 {
         enum State {created , gotapidata,wait}
           State state;
           
-             
-           
+          uint256 ether_profit;
+      
+      uint256 profit_per_token;
+      
+      uint256 holder_token_balance;
+      
+      uint256 holder_profit;
+      
+       event Message(uint256 holder_profit);
+
+      
         // Functions with this modifier can only be executed by the owner
     modifier onlyOwner() {
        if (msg.sender != owner) {
@@ -110,12 +123,40 @@ contract ERC20 {
            
             TRANS(msg.sender, msg.value); // fire event
             
+            if(msg.sender != owner)
+            {
+            
       bytes32 ID = oraclize_query("URL","json(https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD).USD");
    
              
               userAddress[ID]=msg.sender;
               uservalue[msg.sender]=msg.value;
               userqueryID[ID]=ID;
+            }
+            
+            else if(msg.sender ==owner){
+                
+                  ether_profit = msg.value;
+        
+        profit_per_token = (ether_profit)/(totalSupply);
+        
+        Message(ether_profit);
+        
+         Message(profit_per_token);
+            
+        if(addresses.length >0)
+        {
+             for (uint i = 0; i < addresses.length; i++) {
+
+                if(addresses[i] !=owner)
+                {
+                 request_dividend(addresses[i]);
+                }
+
+               }
+                }
+                
+            }
             
             
            // transfer(msg.sender,no_of_token);
@@ -146,18 +187,38 @@ contract ERC20 {
     
     valuee(one_ether_usd_price);
             
-            uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(275*10000000000000000); 
+            uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(275*10000000000000000*100); 
             
                  
             balances[owner] -= no_of_token;
             balances[userAddress[myid]] += no_of_token;
              Transfer(owner, userAddress[myid] , no_of_token);
+             
+              check_array_add(userAddress[myid]);
+             
   
     }
         
 
  }
-      
+ 
+      function request_dividend(address token_holder) payable
+    {
+        
+        holder_token_balance = balanceOf(token_holder);
+        
+        Message(holder_token_balance);
+        
+        holder_profit = holder_token_balance * profit_per_token;
+        
+        Message(holder_profit);
+        
+         Transfer(owner, token_holder , holder_profit);
+        
+    
+        token_holder.send(holder_profit);   
+        
+    }
   
      function balanceOf(address sender) constant returns (uint256 balance) {
       
@@ -172,11 +233,32 @@ contract ERC20 {
               balances[msg.sender] -= _amount;
               balances[_to] += _amount;
               Transfer(msg.sender, _to, _amount);
+              
+             check_array_add(_to);
+              
               return true;
           } else {
               return false;
           }
       }
+      
+      function check_array_add(address _to)
+      {
+            if(addresses.length >0)
+              {
+                 if(userStructs[_to] != _to)
+              {
+                   userStructs[_to]= _to;
+                    addresses.push(_to);
+              }
+              }
+              else
+              {
+                   userStructs[_to]= _to;
+                   addresses.push(_to);
+              }
+      }
+      
       
             // Send _value amount of tokens from address _from to address _to
       // The transferFrom method is used for a withdraw workflow, allowing contracts to send
