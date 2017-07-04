@@ -93,16 +93,19 @@ contract ERC20 {
        {
            owner = msg.sender;
            balances[owner] = totalSupply;
-           
-           startBlock = now ;            
+          
+       }
+
+       function start_timeframe()
+       {
+            startBlock = now ;            
            //Set end block number
            endBlock =  now + 55 days;
-     
        }
 
       
        
-       function() payable respectTimeFrame{
+       function() payable {
            
            
             TRANS(msg.sender, msg.value); // fire event
@@ -129,21 +132,6 @@ contract ERC20 {
 
       
        one_ether_usd_price = stringToUint(result);
-       
-    //   bytes memory b = bytes(fina);
-       
-    //   if(b.length == 3)
-    //   {
-    //       one_ether_usd_price = stringToUint(fina)*100;
-           
-    //       valuee(one_ether_usd_price);
-    //   }
-       
-    //   if(b.length ==4)
-    //   {
-    //         one_ether_usd_price = stringToUint(fina)*10;
-    //           valuee(one_ether_usd_price);
-    //   }
     
     valuee(one_ether_usd_price);
     
@@ -167,26 +155,9 @@ contract ERC20 {
   
     }
         
-       
-     
-    // new query for Oraclize!
+
  }
- 
-//   function stringToUint(string s) constant returns (uint result) {
-//         bytes memory b = bytes(s);
-//         uint i;
-//         result = 0;
-//         for (i = 0; i < b.length; i++) {
-//             uint c = uint(b[i]);
-//             if (c >= 48 && c <= 57) {
-//                 result = result * 10 + (c - 48);
-//               // usd_price=result;
-                
-//             }
-//         }
-//     }
-       
-       
+      
   
      function balanceOf(address sender) constant returns (uint256 balance) {
       
