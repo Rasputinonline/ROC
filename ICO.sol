@@ -158,7 +158,7 @@ contract ERC20 {
     
     valuee(one_ether_usd_price);
             
-            uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(260*10000000000000000); 
+            uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(275*10000000000000000); 
             
                  
             balances[owner] -= no_of_token;
