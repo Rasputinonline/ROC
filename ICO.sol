@@ -42,7 +42,7 @@ contract ERC20 {
   
   	// Symbol of token
     string public constant symbol = "ROC"; 
-  ///  uint8 public constant decimals = 10;  // decimal places
+    uint8 public constant decimals = 18;  // decimal places
 
     bytes32 myid_;
     
