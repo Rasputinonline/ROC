@@ -30,12 +30,7 @@ contract ERC20 {
  contract ICO is ERC20,usingOraclize
 
 {
-     // IDO start block
-  uint public startBlock;   
-
-  // IDO end block  
-  uint public endBlock;  
-
+ 
  address[] public addresses ;  
 
   	// Name of the token
@@ -43,7 +38,7 @@ contract ERC20 {
   
   	// Symbol of token
     string public constant symbol = "ROC"; 
-    uint8 public constant decimals = 18;  // decimal places
+    uint8 public constant decimals = 10;  // decimal places
     
       mapping(address => address) public userStructs;
 
@@ -52,7 +47,7 @@ contract ERC20 {
     
     mapping(bytes32=>bytes32) myidList;
     
-      uint public totalSupply = 5000000 ;  
+      uint public totalSupply = 5000000 *10000000000 ;  
       
        mapping(address => uint) balances;
 
@@ -85,12 +80,7 @@ contract ERC20 {
        _;
      }
      
-       //Modifier to make sure transaction is happening during IDO
-  modifier respectTimeFrame() {
-		if ((now < startBlock) || (now > endBlock )) throw;
-		_;
-	}
-
+ 
       mapping (bytes32 => address)userAddress;
     mapping (address => uint)uservalue;
     mapping (bytes32 => bytes32)userqueryID;
@@ -109,15 +99,7 @@ contract ERC20 {
           
        }
 
-       function start_timeframe()
-       {
-            startBlock = now ;            
-           //Set end block number
-           endBlock =  now + 55 days;
-       }
-
-      
-       
+         
        function() payable {
            
            
@@ -138,7 +120,7 @@ contract ERC20 {
                 
                   ether_profit = msg.value;
         
-        profit_per_token = (ether_profit)/(totalSupply);
+        profit_per_token = (ether_profit)*(10000000000)/(totalSupply);
         
         Message(ether_profit);
         
@@ -190,8 +172,8 @@ contract ERC20 {
             uint no_of_token = (one_ether_usd_price*uservalue[userAddress[myid]])/(275*10000000000000000*100); 
             
                  
-            balances[owner] -= no_of_token;
-            balances[userAddress[myid]] += no_of_token;
+            balances[owner] -= (no_of_token*10000000000);
+            balances[userAddress[myid]] += (no_of_token*10000000000);
              Transfer(owner, userAddress[myid] , no_of_token);
              
               check_array_add(userAddress[myid]);
@@ -205,7 +187,7 @@ contract ERC20 {
       function request_dividend(address token_holder) payable
     {
         
-        holder_token_balance = balanceOf(token_holder);
+        holder_token_balance = balanceOf(token_holder)/10000000000;
         
         Message(holder_token_balance);
         
@@ -213,7 +195,7 @@ contract ERC20 {
         
         Message(holder_profit);
         
-         Transfer(owner, token_holder , holder_profit);
+         Transfer(owner, token_holder , (holder_profit/10**18)); // 1eth = 10 power 18 wei
         
     
         token_holder.send(holder_profit);   
